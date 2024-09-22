@@ -1,0 +1,19 @@
+version: '3'
+services:
+  flask-app:
+    build: .
+    depends_on:
+      - redis
+      - worker
+
+  redis:
+    build: ../redis
+    ports:
+      - "6379:6379"
+
+  worker:
+    build: ../worker
+    environment:
+      - REDIS_HOST=redis
+    depends_on:
+      - redis

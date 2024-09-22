@@ -1,0 +1,13 @@
+version: '3'
+services:
+  flask-app:
+    build: .
+    ports:
+      - "5000:80"
+    depends_on:
+      - redis
+
+  redis:
+    build: ./redis
+    ports:
+      - "6379:6379"

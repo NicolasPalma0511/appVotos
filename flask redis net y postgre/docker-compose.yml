@@ -1,0 +1,35 @@
+version: '3'
+services:
+  flask-app:
+    build: .
+    ports:
+      - "80:80"
+    depends_on:
+      - redis
+      - worker
+      - db
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+  worker:
+    build: ../worker
+    environment:
+      - REDIS_HOST=redis
+    depends_on:
+      - redis
+
+  db:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
